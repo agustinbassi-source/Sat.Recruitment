@@ -1,15 +1,22 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Sat.Recruitment.IDAO.Interface;
+using Sat.Recruitment.DAO;
+using Sat.Recruitment.IBusiness.Interface;
+using Sat.Recruitment.Business;
+using Sat.Recruitment.Repository;
+using Sat.Recruitment.IBusiness.Business;
+using Sat.Recruitment.Api.Services;
 
 namespace Sat.Recruitment.Api
 {
@@ -25,8 +32,17 @@ namespace Sat.Recruitment.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
             services.AddControllers();
             services.AddSwaggerGen();
+ 
+            services.Inject();
+
+            var serviceProvider = services.BuildServiceProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
